@@ -1,0 +1,6 @@
+addpath('../code_AM')
+addpath('../code_LHS')
+addpath('../code_LL')
+addpath('../code_UNC')
+addpath('../code_flow_model')
+addpath('../code_steadystate_uncertainty_by_kflow/')
