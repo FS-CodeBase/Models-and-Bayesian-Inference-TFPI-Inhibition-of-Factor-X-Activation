@@ -67,13 +67,10 @@ sp = (2.38)^2/(n_est);
 [lb,ub] = fun_get_param_bounds;
 
 Vn = sp*Vn;%+EPS*Ip; % For stability
-save_dir = 'AM_Ests/';
 
 % Save folder
 f_id = am_info.f_id;
 if(not(exist(f_id,'dir'))),mkdir(f_id);end
-
-if not(exist(save_dir,'dir')); mkdir(save_dir);end
 
 % Step 1: NON-ADAPTIVE METROPOLIS STEP
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -141,9 +138,17 @@ for itr = curr_itr:(curr_itr+mod_adapt)
 			dat_str,itr,current_dur,expected_dur,current_dur/expected_dur*100);
         fun_print_parameter_est([PRMS(itr,:) LL_vec(itr)]);
         fun_print_parameter_est(PRMS(itr,1:end-1));
-        save([f_id,'/LHS_AM_',dat_str,'_nonadpt',num2str(non_adapt_itrs),...
-                'adpt',num2str(adapt_itrs),'_nprms',num2str(nprms_est)],...
+        switch dat_str
+            case 'Exp1ExpData'
+                save([f_id,'/AM_ParamEsts_Dataset1'],...
                 'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+            case 'Exp2ExpData'
+                save([f_id,'/AM_ParamEsts_Dataset2'],...
+                'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+            case 'ExpAllExpData'
+                save([f_id,'/AM_ParamEsts_Dataset1and2'],...
+                'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+        end
     end
 end
 disp('[1/3 end] AM Alg Est:---------------------------------------------------')
@@ -169,16 +174,24 @@ for itr = curr_itr:(curr_itr+mod_adapt)
     end
 	
     if mod(itr-non_adapt_itrs,mod_adapt)==0
-	current_dur  = toc/(60*60*24);
-	expected_dur = (current_dur/(itr-non_adapt_itrs))*adapt_itrs;
+	    current_dur  = toc/(60*60*24);
+	    expected_dur = (current_dur/(itr-non_adapt_itrs))*adapt_itrs;
         disp('[Part 2 2/3 IP] AM Alg Est:---------------------------------------------------')
 	    fprintf('AM with [%s] iteration: %d | runtime: %0.3f days | E(AM runtime): %0.3f days | Complete: %0.3f%%\n',...
 			dat_str,itr,current_dur,expected_dur,current_dur/expected_dur*100);
         fun_print_parameter_est([PRMS(itr,:) LL_vec(itr)]);
         fun_print_parameter_est(PRMS(itr,1:end-1));
-        save([f_id,'/LHS_AM_',dat_str,'_nonadpt',num2str(non_adapt_itrs),...
-                'adpt',num2str(adapt_itrs),'_nprms',num2str(nprms_est)],...
+        switch dat_str
+            case 'Exp1ExpData'
+                save([f_id,'/AM_ParamEsts_Dataset1'],...
                 'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+            case 'Exp2ExpData'
+                save([f_id,'/AM_ParamEsts_Dataset2'],...
+                'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+            case 'ExpAllExpData'
+                save([f_id,'/AM_ParamEsts_Dataset1and2'],...
+                'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+        end
     end
 end
 
@@ -213,14 +226,30 @@ for itr = curr_itr:(non_adapt_itrs+adapt_itrs)
 			dat_str,itr,current_dur,expected_dur,current_dur/expected_dur*100);
         fun_print_parameter_est([PRMS(itr,:) LL_vec(itr)]);
         fun_print_parameter_est(PRMS(itr,1:end-1));
-        save([f_id,'/LHS_AM_',dat_str,'_nonadpt',num2str(non_adapt_itrs),...
-                'adpt',num2str(adapt_itrs),'_nprms',num2str(nprms_est)],...
+        switch dat_str
+            case 'Exp1ExpData'
+                save([f_id,'/AM_ParamEsts_Dataset1'],...
                 'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+            case 'Exp2ExpData'
+                save([f_id,'/AM_ParamEsts_Dataset2'],...
+                'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+            case 'ExpAllExpData'
+                save([f_id,'/AM_ParamEsts_Dataset1and2'],...
+                'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+        end
     end
 end
 disp('[3/3 end] AM Alg Est:---------------------------------------------------')
 Cmat2 = Vn;
 
-save([f_id,'/LHS_AM_',dat_str,'_nonadpt',num2str(non_adapt_itrs),...
-        'adpt',num2str(adapt_itrs),'_nprms',num2str(nprms_est)],...
+switch dat_str
+    case 'Exp1ExpData'
+        save([f_id,'/AM_ParamEsts_Dataset1'],...
         'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+    case 'Exp2ExpData'
+        save([f_id,'/AM_ParamEsts_Dataset2'],...
+        'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+    case 'ExpAllExpData'
+        save([f_id,'/AM_ParamEsts_Dataset1and2'],...
+        'PRMS','Cmat1','Cmat2','LL_vec','am_info','itr','-v7.3');
+end
